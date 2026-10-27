@@ -1,0 +1,75 @@
+.auth-page,
+.auth-page *,
+.auth-page *::before,
+.auth-page *::after {
+  box-sizing: border-box;
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: #f1f5f9;
+  font-family: system-ui, sans-serif;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  display: grid;
+  gap: 16px;
+  padding: clamp(20px, 5vw, 40px);
+  background: white;
+  color: #0f172a;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.auth-card h2 {
+  margin: 0;
+  font-size: clamp(22px, 4vw, 28px);
+}
+
+.auth-sub {
+  margin: 0 0 4px;
+  color: #64748b;
+  font-size: 15px;
+}
+
+.auth-card input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.auth-card input:focus {
+  outline: 2px solid #3b82f6;
+  border-color: transparent;
+}
+
+.auth-primary {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #3b82f6;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.auth-primary:hover {
+  background: #2563eb;
+}
+
+.auth-link {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-size: 14px;
+  cursor: pointer;
+}
