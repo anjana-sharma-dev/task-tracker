@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from sqlalchemy.orm import Session
 from ..dependency import get_current_user
 
@@ -19,8 +19,13 @@ def create_project(data: schemas.ProjectCreate, db: Session = Depends(get_db),
     return project
 
 @router.get("", response_model=list[schemas.ProjectOut])
-def list_projects(db: Session = Depends(get_db)):
-    return db.scalars(select(models.Project)).all()
+def list_projects(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    assigned = select(models.Task.project_id).where(models.Task.assignee_id == current_user.id)
+    stmt = select(models.Project).where(or_(
+        models.Project.owner_id == current_user.id, models.Project.id.in_(assigned)
+    ))
+    # return db.scalars(select(models.Project)).all()
+    return db.scalars(stmt).all()
 
 
 @router.get("/{project_id}", response_model=schemas.ProjectOut)
@@ -42,3 +47,4 @@ def create_project(
     db.commit()
     db.refresh(project)
     return project
+

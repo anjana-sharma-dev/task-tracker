@@ -11,7 +11,7 @@ const COLUMNS = [
   {"key": "done", "title": "Done"},
 ]
 
-export default function Board({projectId}) {
+export default function Board({projectId, canDelete}) {
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState("");
 
@@ -119,7 +119,9 @@ export default function Board({projectId}) {
                           </option>
                         ))}
                       </select>
-                      <button onClick={() => handleDelete(t.id)} style={{ marginLeft: 8 }}>Delete</button>
+                      {canDelete && (
+                        <button onClick={() => handleDelete(t.id)} style={{ marginLeft: 8 }}>Delete</button>
+                      )}
                       <Comments taskId={t.id} />
                     </div>
                   </div>

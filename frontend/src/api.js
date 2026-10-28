@@ -31,6 +31,7 @@ export async function updateTask(taskId, data) {
 
 export async function deleteTask(taskId) {
     const res = await request(`/tasks/${taskId}`, { method: "DELETE" });
+    if (res.status === 403) throw new Error("Only the project owner can delete tasks")
     if (!res.ok) throw new Error("Failed to delete task");
 }
 

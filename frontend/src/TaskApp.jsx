@@ -26,6 +26,10 @@ export default function TaskApp({user, onLogout}){
     setProjectId(project.id);
   }
 
+  const currentProject = projects.find((p)=> p.id === projectId);
+  const isOwner = currentProject?.owner_id === user.id;
+  console.log("project:", currentProject, "| isOwner:", isOwner, "| user.id:", user.id);
+
   return( 
     <div style={{ padding: 24 }}>
       <div>
@@ -35,7 +39,8 @@ export default function TaskApp({user, onLogout}){
             {user.name} <button onClick={onLogout}>Logout</button>
           </div>
         </div>
-        <select onChange={(e) => setProjectId((e.target.value))} style={{ marginBottom: 16 }} >{projects.map((p) => (
+        <select value={projectId ?? ""} onChange={(e) => setProjectId(Number(e.target.value))} style={{ marginBottom: 16 }} >
+          {projects.map((p) => (
           <option key={p.id} value={p.id}>
             {p.name}
           </option>))}
@@ -43,7 +48,8 @@ export default function TaskApp({user, onLogout}){
         </select>
         <AddProjectForm onAdded={handleProjectAdded} />
       </div>
-        {projectId !== null && <Board projectId={projectId} />}    
+      
+        {projectId !== null && <Board projectId={projectId} canDelete = {isOwner} />}    
     </div>
   );
 }
