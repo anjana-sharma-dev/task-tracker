@@ -31,7 +31,7 @@ export default function AuthForm({onLoggedIn}) {
           {mode === "login" ? "Login to Team Task Tracker" : "Sign up to get started"}
         </p>
         {mode === "signup" && (
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
+          <input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
         )}
         <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"/>

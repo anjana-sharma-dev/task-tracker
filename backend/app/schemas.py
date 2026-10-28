@@ -1,10 +1,9 @@
 from datetime import datetime, date
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Literal
 
-
 class UserCreate(BaseModel):
-    name: str
+    name: str = Field(min_length=1)
     email: str
     password: str
 
@@ -72,6 +71,11 @@ class TaskOut(BaseModel):
 class CommentCreate(BaseModel):
     content: str
 
+class userBrief(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
 
 class CommentOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -81,6 +85,7 @@ class CommentOut(BaseModel):
     task_id: int
     user_id: int
     created_at: datetime 
+    user: userBrief
 
 class LoginRequest(BaseModel):
     email: str

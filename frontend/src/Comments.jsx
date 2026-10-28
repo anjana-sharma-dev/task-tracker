@@ -30,7 +30,7 @@ export default function Comments({taskId}){
       {open && (
           <div>
             {comments.map((c)=> (
-              <p key={c.id}>User{c.user_id}: {c.content}</p>
+              <p key={c.id}><strong>{c.user.name}:</strong> {c.content}</p>
             ))}
             <form onSubmit={handleSubmit}>
               <input value={text} onChange={(e)=> setText(e.target.value)} placeholder="Write a comments"/>

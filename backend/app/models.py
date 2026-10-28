@@ -37,7 +37,6 @@ class Label(Base):
     name: Mapped[str] = mapped_column(String(50), unique=True)
     color: Mapped[str] = mapped_column(String(20), default="#808080")
 
-
 class Task(Base):
     __tablename__ = "tasks"
 
@@ -52,7 +51,7 @@ class Task(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
     labels: Mapped[list["Label"]] = relationship(secondary=task_labels)
-
+    comments: Mapped[list["Comment"]] = relationship(cascade="all, delete-orphan")
 
 class Comment(Base):
     __tablename__ = "comments"
@@ -62,4 +61,5 @@ class Comment(Base):
     task_id: Mapped[int] = mapped_column(ForeignKey("tasks.id"))
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    user: Mapped["User"] = relationship()
 
