@@ -49,6 +49,7 @@ class Task(Base):
     project_id: Mapped[int] = mapped_column(ForeignKey("projects.id"))
     assignee_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    created_by_id: Mapped[ int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
 
     labels: Mapped[list["Label"]] = relationship(secondary=task_labels)
     comments: Mapped[list["Comment"]] = relationship(cascade="all, delete-orphan")

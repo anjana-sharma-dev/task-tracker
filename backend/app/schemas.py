@@ -65,6 +65,7 @@ class TaskOut(BaseModel):
     due_date: date | None
     project_id: int
     assignee_id: int | None
+    created_by_id: int | None
     created_at: datetime
     labels: list[LabelOut] = []
 

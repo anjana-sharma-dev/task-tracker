@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { getTasks, updateTask, deleteTask } from "./api"
+import { getTasks, updateTask, deleteTask , getUsers} from "./api"
 import AddTaskForm from "./AddTaskForm";
 import Comments from "./Comments";
 import "./Board.css";
@@ -11,9 +11,10 @@ const COLUMNS = [
   {"key": "done", "title": "Done"},
 ]
 
-export default function Board({projectId, canDelete}) {
+export default function Board({projectId, isOwner}) {
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState("");
+    const [users, setUsers] = useState([])
 
 
     const loadTasks = useCallback(() => {
@@ -26,6 +27,9 @@ export default function Board({projectId, canDelete}) {
       loadTasks();
     }, [loadTasks])
 
+    useEffect(()=> {
+      getUsers().then(setUsers).catch((e)=> console.error(e))
+    }, [])
 
     if (error) return <p>{error}</p>;
 
@@ -38,7 +42,7 @@ export default function Board({projectId, canDelete}) {
       }
     }
 
-
+    
     async function handleDelete(taskID) {
       if (!window.confirm("Do you want to delete this task?")) return;
       try{
@@ -102,6 +106,26 @@ export default function Board({projectId, canDelete}) {
                         <option value="high">High</option>
                       </select>
                     </div>
+                    {isOwner ? (
+                      <div>
+                        Assign to:{" "}
+                        <select
+                          value={t.assignee_id ?? ""}
+                          onChange={(e) =>
+                            handleUpdate(t.id, {assignee_id: e.target.value ? Number(e.target.value) : null,})
+                          }
+                        >
+                          <option value="">Unassigned</option> {users.map((u) => (
+                          <option key={u.id} value={u.id}>{u.name}</option>
+                          ))}
+                        </select>
+                      </div>
+                    ) : (
+                      <div>
+                        Assigned to: {users.find((u) => u.id === t.assignee_id)?.name ?? "Unassigned"}
+                      </div>
+                    )}
+
 
                     <div className="task-field">
                       <label>Move to</label>
@@ -119,7 +143,7 @@ export default function Board({projectId, canDelete}) {
                           </option>
                         ))}
                       </select>
-                      {canDelete && (
+                      {isOwner && (
                         <button onClick={() => handleDelete(t.id)} style={{ marginLeft: 8 }}>Delete</button>
                       )}
                       <Comments taskId={t.id} />

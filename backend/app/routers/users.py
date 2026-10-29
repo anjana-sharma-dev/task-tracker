@@ -31,7 +31,7 @@ def create_user(data: schemas.UserCreate, db: Session = Depends(get_db)):
     return user
 
 
-@router.get("", response_model=list[schemas.UserOut])
+@router.get("", response_model=list[schemas.userBrief])
 def list_users(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     return db.scalars(select(models.User)).all()
 

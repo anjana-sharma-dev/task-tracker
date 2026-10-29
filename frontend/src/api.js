@@ -24,10 +24,11 @@ export async function updateTask(taskId, data) {
     method: "PUT",
     body: JSON.stringify(data),
   });
-
+  if (res.status === 403) throw new Error("You do not have permission to do this");
   if (!res.ok) throw new Error("Failed to update task");
   return res.json();
 }
+
 
 export async function deleteTask(taskId) {
     const res = await request(`/tasks/${taskId}`, { method: "DELETE" });

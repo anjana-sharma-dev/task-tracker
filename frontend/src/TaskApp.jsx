@@ -28,6 +28,7 @@ export default function TaskApp({user, onLogout}){
 
   const currentProject = projects.find((p)=> p.id === projectId);
   const isOwner = currentProject?.owner_id === user.id;
+
   console.log("project:", currentProject, "| isOwner:", isOwner, "| user.id:", user.id);
 
   return( 
@@ -48,9 +49,7 @@ export default function TaskApp({user, onLogout}){
         </select>
         <AddProjectForm onAdded={handleProjectAdded} />
       </div>
-      
-        {projectId !== null && <Board projectId={projectId} canDelete = {isOwner} />}    
+        {projectId !== null && <Board projectId={projectId} isOwner = {isOwner} />}    
     </div>
   );
 }
-
