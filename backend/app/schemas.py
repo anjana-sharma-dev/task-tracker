@@ -54,6 +54,7 @@ class TaskUpdate(BaseModel):
     due_date: date | None = None
     assignee_id: int | None = None
 
+
 class TaskOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

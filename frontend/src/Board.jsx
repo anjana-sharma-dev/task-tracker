@@ -16,13 +16,12 @@ export default function Board({projectId, isOwner}) {
     const [error, setError] = useState("");
     const [users, setUsers] = useState([])
 
-
     const loadTasks = useCallback(() => {
         getTasks(projectId)
           .then(setTasks)
           .catch((e) => setError(e.message));
       }, [projectId]);
-      
+
     useEffect(()=> {
       loadTasks();
     }, [loadTasks])
@@ -32,6 +31,8 @@ export default function Board({projectId, isOwner}) {
     }, [])
 
     if (error) return <p>{error}</p>;
+    
+    const today = new Date().toLocaleDateString("en-CA");
 
     async function handleUpdate(taskID, changes) {
       try{
@@ -41,7 +42,7 @@ export default function Board({projectId, isOwner}) {
         alert(err.message);
       }
     }
-
+  
     
     async function handleDelete(taskID) {
       if (!window.confirm("Do you want to delete this task?")) return;
@@ -50,9 +51,9 @@ export default function Board({projectId, isOwner}) {
         loadTasks();
       } catch (err) {
           alert(err.message);
-      }
-      
+      }      
     }
+
 
   return (
     <div className="board-page">
@@ -65,7 +66,7 @@ export default function Board({projectId, isOwner}) {
       </div>
 
       <AddTaskForm projectId={projectId} onAdded={loadTasks} />
-
+            
       <div className="board">
         {COLUMNS.map((col) => {
           const columnTasks = tasks.filter(
@@ -90,6 +91,11 @@ export default function Board({projectId, isOwner}) {
                     </div>
 
                     <h4>{t.title}</h4>
+                    {t.due_date && t.due_date < today && t.status !== "done" && (
+                      <span style={{ color: "#dc2626", fontSize: 12, fontWeight: 600 }}>
+                        Overdue
+                      </span>
+                    )}
 
                     <div className="task-field">
                       <label>Priority</label>
@@ -105,6 +111,14 @@ export default function Board({projectId, isOwner}) {
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
                       </select>
+                    </div>
+                    <div>
+                      Due:{" "}
+                      <input
+                        type="date"
+                        value={t.due_date ?? ""}
+                        onChange={(e) => handleUpdate(t.id, { due_date: e.target.value || null })}
+                      />
                     </div>
                     {isOwner ? (
                       <div>
@@ -125,7 +139,6 @@ export default function Board({projectId, isOwner}) {
                         Assigned to: {users.find((u) => u.id === t.assignee_id)?.name ?? "Unassigned"}
                       </div>
                     )}
-
 
                     <div className="task-field">
                       <label>Move to</label>
@@ -164,4 +177,3 @@ export default function Board({projectId, isOwner}) {
     </div>
   );  
 };
-

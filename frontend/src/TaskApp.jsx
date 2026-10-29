@@ -29,8 +29,6 @@ export default function TaskApp({user, onLogout}){
   const currentProject = projects.find((p)=> p.id === projectId);
   const isOwner = currentProject?.owner_id === user.id;
 
-  console.log("project:", currentProject, "| isOwner:", isOwner, "| user.id:", user.id);
-
   return( 
     <div style={{ padding: 24 }}>
       <div>
