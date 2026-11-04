@@ -48,7 +48,6 @@ export async function getUsers() {
   return res.json();
 }
 
-
 export async function createProject(data) {
   const res = await request(`/projects`, {
     method: "POST", 
@@ -109,11 +108,15 @@ export async function login(email, password) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
+  if (res.status == 429){
+    const err = await res.json();
+    throw new Error(err.detail)
+  }
+
   if (!res.ok) throw new Error("Wrong email or password");
   const data = await res.json();
   localStorage.setItem("token", data.access_token);
 }
-
 
 export async function signup(name, email, password) {
   const res = await request("/users", {

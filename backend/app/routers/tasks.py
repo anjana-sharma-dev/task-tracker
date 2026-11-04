@@ -6,6 +6,7 @@ from .. import models, schemas
 from ..database import get_db
 from ..dependency import get_current_user
 from ..permissions import is_member, get_task_for_user
+from ..redis_client import r
 
 router = APIRouter(tags=["Tasks"])
 
@@ -27,9 +28,11 @@ def create_task(project_id: int, data: schemas.TaskCreate, db: Session= Depends(
     task = models.Task(project_id=project_id, created_by_id=current_user.id, **values)
     db.add(task)
     db.commit()
+    for uid in {current_user.id, task.assignee_id}:
+        if uid:
+            r.delete(f"projects:user:{uid}")
     db.refresh(task)
     return task
-
 
 @router.get("/tasks", response_model= list[schemas.TaskOut])
 def list_tasks(
@@ -60,12 +63,14 @@ def list_tasks(
 def update_task(task_id: int, data: schemas.TaskUpdate, db: Session = Depends(get_db),
                 current_user: models.User = Depends(get_current_user) ):
     task = get_task_for_user(db, task_id, current_user)
+    old_assignee = task.assignee_id
 
     changes = data.model_dump(exclude_unset=True)
     if "assignee_id" in changes:
         project = db.get(models.Project, task.project_id)
-        if project.owner_id != current_user.id:
-            raise HTTPException(status_code=402, detail="Only the project owner can assign tasks")
+        if current_user.id not in (project.owner_id, task.created_by_id):
+            raise HTTPException(status_code=403, detail="Only the project owner or task creator can assign tasks")
+        
         new_id = changes["assignee_id"]
         if new_id is not None and not db.get(models.User, new_id):
             raise HTTPException(status_code=404, detail="User not found")
@@ -73,6 +78,10 @@ def update_task(task_id: int, data: schemas.TaskUpdate, db: Session = Depends(ge
     for key, value in changes.items():
         setattr(task, key, value)
     db.commit()
+
+    for uid in {old_assignee, task.assignee_id}:
+        if uid:
+            r.delete(f"projects:user:{uid}")
     db.refresh(task)
     return task
 
@@ -86,4 +95,3 @@ def delete_task(task_id: int, db: Session = Depends(get_db), current_user: model
         raise HTTPException(status_code=403, detail="Only the project owner can delete tasks")
     db.delete(task)
     db.commit()
-

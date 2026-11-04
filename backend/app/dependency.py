@@ -18,12 +18,9 @@ def get_current_user(creds: HTTPAuthorizationCredentials = Depends(bearer),
   except (jwt.PyJWKError, KeyError, ValueError):
     raise HTTPException(status_code=401, detail="Invalid or expired token")
 
-
   user = db.get(models.User, user_id)
   if not user or not user.is_active:
         raise HTTPException(status_code=401, detail="User not found")
   return user
      
                          
-
-
