@@ -133,3 +133,23 @@ export async function getMe() {
   if (!res.ok) throw new Error("Not logged in");
   return res.json();
 }
+
+export async function logout() {
+  try {
+    await request("/auth/logout", { method: "POST" });
+  } catch {
+    
+  }
+  clearToken();
+}
+
+export async function getNotifications() {
+  const res = await request("/notifications");
+  if (!res.ok) throw new Error("Failed to load notifications");
+  return res.json();
+}
+
+export async function clearNotifications() {
+  const res = await request("/notifications", { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to clear notifications");
+}

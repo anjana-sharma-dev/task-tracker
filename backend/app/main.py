@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .dependency import get_current_user
 
 app = FastAPI(title="Team Task Tracker")
-from .routers import users, projects, tasks, comments, auth
+from .routers import users, projects, tasks, comments, auth, notifications
 
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173"],
       allow_methods=["*"],
@@ -18,7 +18,7 @@ protected = [Depends(get_current_user)]
 app.include_router(projects.router, dependencies=protected)
 app.include_router(tasks.router, dependencies=protected)
 app.include_router(comments.router, dependencies=protected)
-
+app.include_router(notifications.router, dependencies=protected)
 
 @app.get("/")
 def root():

@@ -2,6 +2,7 @@ import { useCallback, useEffect , useState} from "react";
 import Board from "./Board";
 import { getProjects } from "./api";
 import AddProjectForm from "./AddProjectForm";
+import Notifications from "./Notifications";
 
 
 export default function TaskApp({user, onLogout}){
@@ -35,7 +36,8 @@ export default function TaskApp({user, onLogout}){
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h1>Team Task Tracker</h1>
           <div>
-            {user.name} <button onClick={onLogout}>Logout</button>
+            {user.name}
+            {user.name} <Notifications /> <button onClick={onLogout}>Logout</button>
           </div>
         </div>
         <select value={projectId ?? ""} onChange={(e) => setProjectId(Number(e.target.value))} style={{ marginBottom: 16 }} >

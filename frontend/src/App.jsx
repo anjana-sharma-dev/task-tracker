@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMe, getToken, clearToken } from "./api";
+import { getMe, getToken, clearToken, logout } from "./api";
 import AuthForm from "./AuthForm";
 import TaskApp from "./TaskApp";
 
@@ -24,8 +24,8 @@ export default function App() {
     loadUser();
   }, []);
 
-  function handleLogout() {
-    clearToken();
+  async function handleLogout() {
+    await logout();
     setUser(null);
   }
 

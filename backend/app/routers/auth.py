@@ -1,5 +1,6 @@
 
 from fastapi import HTTPException, APIRouter, Depends
+from fastapi.security import HTTPAuthorizationCredentials
 from sqlalchemy import select
 from ..import models, schemas
 from ..database import get_db
@@ -7,6 +8,10 @@ from sqlalchemy.orm import Session
 from ..security import verify_password, create_access_token
 from ..dependency import get_current_user
 from ..redis_client import r 
+import time 
+import jwt 
+from ..dependency import bearer
+from ..security import SECRET_KEY, ALGORITHM
 
 MAX_ATTEMPTS = 5
 WINDOW_SECONDS = 60
@@ -43,6 +48,13 @@ def login(data: schemas.LoginRequest, db: Session= Depends(get_db)):
   
   r.delete(fail_key(data.email))
   return {"access_token": create_access_token(user.id)}
+
+@router.post("/logout", status_code=204)
+def logout(creds: HTTPAuthorizationCredentials = Depends(bearer)):
+    payload = jwt.decode(creds.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+    remaining = payload["exp"] - int(time.time())
+    if payload.get("jti") and remaining > 0:
+        r.setex(f"blacklist:{payload['jti']}", remaining, "1")
 
 @router.get("/me", response_model=schemas.UserOut)
 def me(current_user: models.User = Depends(get_current_user)):

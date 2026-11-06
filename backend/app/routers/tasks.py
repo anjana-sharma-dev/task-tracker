@@ -6,7 +6,8 @@ from .. import models, schemas
 from ..database import get_db
 from ..dependency import get_current_user
 from ..permissions import is_member, get_task_for_user
-from ..redis_client import r
+from ..redis_client import r, queue
+from ..jobs import send_assignment_notification
 
 router = APIRouter(tags=["Tasks"])
 
@@ -28,9 +29,13 @@ def create_task(project_id: int, data: schemas.TaskCreate, db: Session= Depends(
     task = models.Task(project_id=project_id, created_by_id=current_user.id, **values)
     db.add(task)
     db.commit()
+    
     for uid in {current_user.id, task.assignee_id}:
         if uid:
             r.delete(f"projects:user:{uid}")
+    if task.assignee_id:
+            queue.enqueue(send_assignment_notification, task.id, task.assignee_id, task.title)
+
     db.refresh(task)
     return task
 
@@ -82,6 +87,10 @@ def update_task(task_id: int, data: schemas.TaskUpdate, db: Session = Depends(ge
     for uid in {old_assignee, task.assignee_id}:
         if uid:
             r.delete(f"projects:user:{uid}")
+
+    if "assignee_id" in changes and task.assignee_id != old_assignee:
+        queue.enqueue(send_assignment_notification, task.id, task.assignee_id, task.title)
+        
     db.refresh(task)
     return task
 

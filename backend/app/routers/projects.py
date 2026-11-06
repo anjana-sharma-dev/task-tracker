@@ -55,15 +55,15 @@ def get_project(project_id: int, db: Session = Depends(get_db)):
     return project
 
 
-@router.post("", response_model=schemas.ProjectOut, status_code=201)
-def create_project(
-    data: schemas.ProjectCreate,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
-):
-    project = models.Project(**data.model_dump(), owner_id=current_user.id)
-    db.add(project)
-    db.commit()
-    db.refresh(project)
-    return project
+# @router.post("", response_model=schemas.ProjectOut, status_code=201)
+# def create_project(
+#     data: schemas.ProjectCreate,
+#     db: Session = Depends(get_db),
+#     current_user: models.User = Depends(get_current_user),
+# ):
+#     project = models.Project(**data.model_dump(), owner_id=current_user.id)
+#     db.add(project)
+#     db.commit()
+#     db.refresh(project)
+#     return project
 
