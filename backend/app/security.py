@@ -24,4 +24,3 @@ def create_access_token(user_id: int) -> str:
     }
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
-

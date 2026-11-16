@@ -7,3 +7,5 @@ pyjwt
 bcrypt
 redis
 rq
+celery
+packaging
