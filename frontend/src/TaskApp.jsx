@@ -36,7 +36,6 @@ export default function TaskApp({user, onLogout}){
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h1>Team Task Tracker</h1>
           <div>
-            {user.name}
             {user.name} <Notifications /> <button onClick={onLogout}>Logout</button>
           </div>
         </div>

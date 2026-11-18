@@ -95,5 +95,5 @@ class LoginRequest(BaseModel):
 
 class TokenOut(BaseModel):
     access_token: str
-    access_token: str = "bearer"
+    token_type: str = "bearer"
 

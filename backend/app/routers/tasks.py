@@ -17,8 +17,8 @@ def create_task(project_id: int, data: schemas.TaskCreate, db: Session= Depends(
     project = db.get(models.Project, project_id)
     is_owner = project is not None and project.owner_id == current_user.id
 
-    if not project is not (is_owner or is_member(db, project_id, current_user.id)):
-        raise HTTPException(status_code=404, detail="Project not found")
+    if not project or not (is_owner or is_member(db, project_id, current_user.id)):
+      raise HTTPException(status_code=404, detail="Project not found")
     
     values = data.model_dump()
     if not is_owner:

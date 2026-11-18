@@ -29,7 +29,7 @@ def send_overdue_reminders(self):
         r.ltrim(f"notifications:user:{t.assignee_id}", 0, 19)
         sent += 1
         log_summary.delay([t.id for t in tasks])
-        return {"checked": len(tasks), "sent": sent}
+    return {"checked": len(tasks), "sent": sent}
   finally:
         db.close()
 
