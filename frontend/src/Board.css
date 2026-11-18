@@ -1,14 +1,8 @@
-/* ============================================================
-   Task Tracker - Complete Clean Enterprise Stylesheet
-   ============================================================ */
-
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-/* ============================================================
-   Enterprise Layout
-   ============================================================ */
+
 .enterprise-layout {
   display: flex;
   min-height: 100vh;
@@ -19,9 +13,6 @@
   position: relative;
 }
 
-/* ============================================================
-   Sidebar
-   ============================================================ */
 .enterprise-sidebar {
   width: 240px;
   background: #ffffff;
@@ -260,9 +251,7 @@
   color: #b91c1c;
 }
 
-/* ============================================================
-   Main Content Area & Topbar
-   ============================================================ */
+
 .enterprise-main-wrapper {
   flex: 1;
   min-width: 0;
@@ -351,9 +340,7 @@
   width: 100%;
 }
 
-/* ============================================================
-   Notifications Dropdown
-   ============================================================ */
+
 .notifications-container {
   position: relative;
   display: inline-block;
@@ -493,9 +480,6 @@
   margin-bottom: 4px;
 }
 
-/* ============================================================
-   Board Header & Controls
-   ============================================================ */
 .board-page-wrapper {
   display: flex;
   flex-direction: column;
@@ -596,9 +580,7 @@
   color: #047857;
 }
 
-/* ============================================================
-   Filters Toolbar
-   ============================================================ */
+
 .board-toolbar-card {
   display: flex;
   align-items: center;
@@ -722,9 +704,6 @@
   display: none;
 }
 
-/* ============================================================
-   Kanban Board Layout
-   ============================================================ */
 .kanban-scroll-container {
   width: 100%;
 }
@@ -820,9 +799,6 @@
   font-size: 12.5px;
 }
 
-/* ============================================================
-   Task Cards (Responsive Meta & Wrapping)
-   ============================================================ */
 .task-card {
   background: #ffffff;
   border-radius: 8px;
@@ -1061,9 +1037,6 @@
   font-weight: 600;
 }
 
-/* ============================================================
-   List View Styles
-   ============================================================ */
 .task-list-view-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -1157,9 +1130,7 @@
   font-size: 13.5px;
 }
 
-/* ============================================================
-   Task Detail Modal (Responsive & No Cutoffs!)
-   ============================================================ */
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -1516,9 +1487,6 @@
   margin-top: 6px;
 }
 
-/* ============================================================
-   Toast Notification
-   ============================================================ */
 .toast-container {
   position: fixed;
   bottom: 24px;
@@ -1572,9 +1540,7 @@
 .toast-error { background: #991b1b; border-left: 4px solid #ef4444; }
 .toast-info { background: #1e293b; border-left: 4px solid #3b82f6; }
 
-/* ============================================================
-   RESPONSIVENESS (Mobile Tablet Breakpoints)
-   ============================================================ */
+
 @media (max-width: 768px) {
   .enterprise-sidebar {
     position: fixed;

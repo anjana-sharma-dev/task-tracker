@@ -45,7 +45,6 @@ export default function TaskApp({ user, onLogout }) {
 
   return (
     <div className="enterprise-layout">
-      {/* Mobile Sidebar Backdrop */}
       {sidebarOpen && (
         <div
           className="sidebar-backdrop"
@@ -54,9 +53,7 @@ export default function TaskApp({ user, onLogout }) {
         />
       )}
 
-      {/* Left Sidebar */}
       <aside className={`enterprise-sidebar ${sidebarOpen ? "open" : ""}`}>
-        {/* Brand / Workspace header */}
         <div className="sidebar-brand">
           <div className="brand-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -68,7 +65,6 @@ export default function TaskApp({ user, onLogout }) {
             <span className="brand-title">TaskTracker</span>
             <span className="brand-workspace">Team Workspace</span>
           </div>
-          {/* Close button on mobile */}
           <button
             className="sidebar-close-btn"
             onClick={() => setSidebarOpen(false)}
@@ -78,7 +74,6 @@ export default function TaskApp({ user, onLogout }) {
           </button>
         </div>
 
-        {/* Projects Section */}
         <div className="sidebar-section">
           <div className="sidebar-section-header">
             <span>PROJECTS</span>
@@ -121,7 +116,6 @@ export default function TaskApp({ user, onLogout }) {
           </div>
         </div>
 
-        {/* Sidebar Footer / User Profile */}
         <div className="sidebar-footer">
           <div className="sidebar-user-card">
             <div className="sidebar-avatar">{userInitial}</div>
@@ -145,12 +139,10 @@ export default function TaskApp({ user, onLogout }) {
         </div>
       </aside>
 
-      {/* Main Workspace Area */}
+
       <div className="enterprise-main-wrapper">
-        {/* Top Navbar */}
         <header className="enterprise-topbar">
           <div className="topbar-left">
-            {/* Hamburger button for mobile */}
             <button
               className="hamburger-btn"
               onClick={() => setSidebarOpen(true)}
@@ -163,7 +155,6 @@ export default function TaskApp({ user, onLogout }) {
               </svg>
             </button>
 
-            {/* Breadcrumb Navigation */}
             <div className="breadcrumb">
               <span className="breadcrumb-root">Projects</span>
               <span className="breadcrumb-sep">/</span>
@@ -185,7 +176,6 @@ export default function TaskApp({ user, onLogout }) {
           </div>
         </header>
 
-        {/* Dynamic Project Board Content */}
         <main className="enterprise-content">
           {loading ? (
             <div className="app-loading-screen">
@@ -216,7 +206,7 @@ export default function TaskApp({ user, onLogout }) {
         </main>
       </div>
 
-      {/* New Project Modal */}
+
       <NewProjectModal
         isOpen={showNewProjectModal}
         onClose={() => setShowNewProjectModal(false)}

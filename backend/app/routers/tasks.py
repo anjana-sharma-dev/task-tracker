@@ -104,3 +104,4 @@ def delete_task(task_id: int, db: Session = Depends(get_db), current_user: model
         raise HTTPException(status_code=403, detail="Only the project owner can delete tasks")
     db.delete(task)
     db.commit()
+

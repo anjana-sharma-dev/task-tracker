@@ -11,7 +11,6 @@ export default function TaskDetailModal({ task, users, isOwner, onClose, onUpdat
   const [assigneeId, setAssigneeId] = useState(task.assignee_id ?? "");
   const [isSaving, setIsSaving] = useState(false);
 
-  // Comments state
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [loadingComments, setLoadingComments] = useState(true);
@@ -94,9 +93,7 @@ export default function TaskDetailModal({ task, users, isOwner, onClose, onUpdat
           </button>
         </div>
 
-        {/* Content Body */}
         <div className="modal-body">
-          {/* Main Content: Title, Description, Comments */}
           <div className="modal-main-col">
             <input
               className="modal-title-input"
@@ -126,7 +123,6 @@ export default function TaskDetailModal({ task, users, isOwner, onClose, onUpdat
               />
             </div>
 
-            {/* Comments Thread */}
             <div className="modal-section comments-section">
               <label className="modal-section-label">
                 Comments ({comments.length})
@@ -171,7 +167,6 @@ export default function TaskDetailModal({ task, users, isOwner, onClose, onUpdat
             </div>
           </div>
 
-          {/* Sidebar Properties */}
           <div className="modal-side-col">
             <div className="property-group">
               <label>Status</label>

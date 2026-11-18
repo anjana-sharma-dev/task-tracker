@@ -15,7 +15,7 @@ export default function Notifications() {
     return () => clearInterval(timer);
   }, []);
 
-  // Dismiss on outside click
+
   useEffect(() => {
     function handleClickOutside(e) {
       if (containerRef.current && !containerRef.current.contains(e.target)) {

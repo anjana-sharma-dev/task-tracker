@@ -152,7 +152,6 @@ export default function Board({ projectId, project, isOwner }) {
 
   return (
     <div className="board-page-wrapper">
-      {/* Sleek Header Section */}
       <div className="board-header-section">
         <div className="header-meta">
           <div className="title-row">
@@ -166,7 +165,6 @@ export default function Board({ projectId, project, isOwner }) {
           </div>
         </div>
 
-        {/* View Switcher & Stats */}
         <div className="header-controls">
           <div className="view-toggle-bar">
             <button
@@ -208,7 +206,6 @@ export default function Board({ projectId, project, isOwner }) {
         </div>
       </div>
 
-      {/* Clean Unified Filters Toolbar */}
       <div className="board-toolbar-card">
         <div className="search-field">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -262,7 +259,6 @@ export default function Board({ projectId, project, isOwner }) {
         </div>
       </div>
 
-      {/* Mobile Column Switcher (Visible ONLY on mobile <= 768px in Board view) */}
       {viewMode === "board" && (
         <div className="mobile-column-tabs">
           {COLUMNS.map((col) => {
@@ -283,7 +279,6 @@ export default function Board({ projectId, project, isOwner }) {
         </div>
       )}
 
-      {/* View Content: Kanban vs List */}
       {viewMode === "board" ? (
         <div className="kanban-scroll-container">
           <div className="kanban-board-layout">
@@ -300,7 +295,7 @@ export default function Board({ projectId, project, isOwner }) {
                   onDragLeave={(e) => handleDragLeave(e, col.key)}
                   onDrop={(e) => handleDrop(e, col.key)}
                 >
-                  {/* Column Header */}
+              
                   <div className="column-top">
                     <div className="col-title-group">
                       <span className="status-indicator" style={{ backgroundColor: col.accent }}></span>
@@ -309,7 +304,7 @@ export default function Board({ projectId, project, isOwner }) {
                     <span className="col-count-pill">{colTasks.length}</span>
                   </div>
 
-                  {/* Task List */}
+
                   <div className="column-tasks">
                     {colTasks.map((t) => (
                       <TaskCard
@@ -335,7 +330,6 @@ export default function Board({ projectId, project, isOwner }) {
                     )}
                   </div>
 
-                  {/* Inline Add Button in Column */}
                   {addingToCol === col.key ? (
                     <div className="inline-add-card">
                       <input
@@ -381,7 +375,7 @@ export default function Board({ projectId, project, isOwner }) {
           </div>
         </div>
       ) : (
-        /* List View (Responsive: Table on Desktop, Stacked Cards on Mobile) */
+
         <div className="task-list-view-card">
           <div className="list-view-header">
             <span className="col-hdr-task">Task</span>
@@ -456,7 +450,7 @@ export default function Board({ projectId, project, isOwner }) {
         </div>
       )}
 
-      {/* Task Detail Modal */}
+
       {selectedTask && (
         <TaskDetailModal
           task={selectedTask}
