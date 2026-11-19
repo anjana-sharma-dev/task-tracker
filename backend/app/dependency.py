@@ -19,7 +19,7 @@ def get_current_user(creds: HTTPAuthorizationCredentials = Depends(bearer),
     jti = payload.get("jti")
     if jti and r.exists(f"blacklist:{jti}"):
         raise HTTPException(status_code=401, detail="Token revoked")
-  except (jwt.PyJWKError, KeyError, ValueError):
+  except (jwt.PyJWTError, KeyError, ValueError):
     raise HTTPException(status_code=401, detail="Invalid or expired token")
 
   user = db.get(models.User, user_id)
