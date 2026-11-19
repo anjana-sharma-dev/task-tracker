@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from ..dependency import get_current_user
 import json
 from ..redis_client import r
+from ..permissions import is_member
 
 
 from .. import models, schemas
@@ -48,9 +49,9 @@ def list_projects(db: Session = Depends(get_db), current_user: models.User = Dep
 
 
 @router.get("/{project_id}", response_model=schemas.ProjectOut)
-def get_project(project_id: int, db: Session = Depends(get_db)):
+def get_project(project_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     project = db.get(models.Project, project_id)
-    if not project:
+    if not project or (project.owner_id != current_user.id and not is_member(db, project_id, current_user.id)):
         raise HTTPException(status_code=404, detail="Project not found")
     return project
 

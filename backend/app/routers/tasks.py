@@ -102,6 +102,11 @@ def delete_task(task_id: int, db: Session = Depends(get_db), current_user: model
     project = db.get(models.Project, task.project_id)
     if project.owner_id != current_user.id:
         raise HTTPException(status_code=403, detail="Only the project owner can delete tasks")
+    uids_to_clear = {task.created_by_id, task.assignee_id}
     db.delete(task)
     db.commit()
+
+    for uid in uids_to_clear:
+        if uid:
+            r.delete(f"projects:user:{uid}")
 
