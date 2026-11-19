@@ -301,9 +301,20 @@ export default function Board({ projectId, project, isOwner }) {
                       <span className="status-indicator" style={{ backgroundColor: col.accent }}></span>
                       <h3>{col.title}</h3>
                     </div>
-                    <span className="col-count-pill">{colTasks.length}</span>
+                    <div className="col-top-right">
+                      <span className="col-count-pill">{colTasks.length}</span>
+                      <button
+                        className="col-header-add-btn"
+                        title={`Add task to ${col.title}`}
+                        onClick={() => {
+                          setAddingToCol(col.key);
+                          setColTaskTitle("");
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
-
 
                   <div className="column-tasks">
                     {colTasks.map((t) => (

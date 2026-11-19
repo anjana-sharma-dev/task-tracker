@@ -110,3 +110,44 @@ def delete_task(task_id: int, db: Session = Depends(get_db), current_user: model
         if uid:
             r.delete(f"projects:user:{uid}")
 
+@router.get("/labels", response_model=list[schemas.LabelOut])
+def list_labels(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    """Return all available labels (global list)."""
+    return db.scalars(select(models.Label)).all()
+
+
+@router.post("/tasks/{task_id}/labels/{label_id}", response_model=schemas.TaskOut)
+def add_label_to_task(
+    task_id: int,
+    label_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    task = get_task_for_user(db, task_id, current_user)
+    label = db.get(models.Label, label_id)
+    if not label:
+        raise HTTPException(status_code=404, detail="Label not found")
+    if label not in task.labels:          # avoid duplicate
+        task.labels.append(label)
+        db.commit()
+        db.refresh(task)
+    return task
+
+
+@router.delete("/tasks/{task_id}/labels/{label_id}", response_model=schemas.TaskOut)
+def remove_label_from_task(
+    task_id: int,
+    label_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    task = get_task_for_user(db, task_id, current_user)
+    label = db.get(models.Label, label_id)
+    if not label:
+        raise HTTPException(status_code=404, detail="Label not found")
+    if label in task.labels:
+        task.labels.remove(label)
+        db.commit()
+        db.refresh(task)
+    return task
+

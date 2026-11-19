@@ -30,6 +30,20 @@ export default function TaskCard({ task, users, isOwner, onClick, onStatusChange
 
       <h4 className="task-card-title">{task.title}</h4>
 
+      {task.labels && task.labels.length > 0 && (
+        <div className="task-card-labels">
+          {task.labels.map((lbl) => (
+            <span
+              key={lbl.id}
+              className="label-chip"
+              style={{ backgroundColor: lbl.color + "22", color: lbl.color, borderColor: lbl.color + "55" }}
+            >
+              {lbl.name}
+            </span>
+          ))}
+        </div>
+      )}
+
       {task.description && (
         <p className="task-card-desc">{task.description}</p>
       )}

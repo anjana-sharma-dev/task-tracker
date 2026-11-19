@@ -143,6 +143,24 @@ export async function logout() {
   clearToken();
 }
 
+export async function getLabels() {
+  const res = await request("/labels");
+  if (!res.ok) throw new Error("Failed to load labels");
+  return res.json();
+}
+
+export async function addLabelToTask(taskId, labelId) {
+  const res = await request(`/tasks/${taskId}/labels/${labelId}`, { method: "POST" });
+  if (!res.ok) throw new Error("Failed to add label");
+  return res.json();
+}
+
+export async function removeLabelFromTask(taskId, labelId) {
+  const res = await request(`/tasks/${taskId}/labels/${labelId}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to remove label");
+  return res.json();
+}
+
 export async function getNotifications() {
   const res = await request("/notifications");
   if (!res.ok) throw new Error("Failed to load notifications");

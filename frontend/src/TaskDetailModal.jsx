@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { updateTask, deleteTask, getComments, createComment } from "./api";
+import { updateTask, deleteTask, getComments, createComment, getLabels, addLabelToTask, removeLabelFromTask } from "./api";
 import { useToast } from "./Toast";
 
 export default function TaskDetailModal({ task, users, isOwner, onClose, onUpdated }) {
@@ -15,6 +15,9 @@ export default function TaskDetailModal({ task, users, isOwner, onClose, onUpdat
   const [newComment, setNewComment] = useState("");
   const [loadingComments, setLoadingComments] = useState(true);
 
+  const [allLabels, setAllLabels] = useState([]);
+  const [taskLabels, setTaskLabels] = useState(task.labels || []);
+
   const { addToast } = useToast();
 
   const today = new Date().toLocaleDateString("en-CA");
@@ -22,6 +25,7 @@ export default function TaskDetailModal({ task, users, isOwner, onClose, onUpdat
 
   useEffect(() => {
     loadComments();
+    getLabels().then(setAllLabels).catch(() => {});
   }, [task.id]);
 
   async function loadComments() {
@@ -71,6 +75,22 @@ export default function TaskDetailModal({ task, users, isOwner, onClose, onUpdat
       onClose();
     } catch (err) {
       addToast(err.message || "Failed to delete task", "error");
+    }
+  }
+
+  async function handleToggleLabel(label) {
+    const hasLabel = taskLabels.some((l) => l.id === label.id);
+    try {
+      let updated;
+      if (hasLabel) {
+        updated = await removeLabelFromTask(task.id, label.id);
+      } else {
+        updated = await addLabelToTask(task.id, label.id);
+      }
+      setTaskLabels(updated.labels || []);
+      onUpdated(); 
+    } catch (err) {
+      addToast(err.message || "Failed to update label", "error");
     }
   }
 
@@ -234,6 +254,31 @@ export default function TaskDetailModal({ task, users, isOwner, onClose, onUpdat
                   {users.find((u) => u.id === task.assignee_id)?.name ?? "Unassigned"}
                 </div>
               )}
+            </div>
+
+            {/* Labels */}
+            <div className="property-group">
+              <label>Labels</label>
+              <div className="label-picker">
+                {allLabels.map((lbl) => {
+                  const active = taskLabels.some((l) => l.id === lbl.id);
+                  return (
+                    <span
+                      key={lbl.id}
+                      className={`label-chip label-chip-toggle ${active ? "label-chip-active" : ""}`}
+                      style={{
+                        backgroundColor: active ? lbl.color + "33" : "transparent",
+                        color: lbl.color,
+                        borderColor: lbl.color + "88",
+                      }}
+                      onClick={() => handleToggleLabel(lbl)}
+                      title={active ? "Remove label" : "Add label"}
+                    >
+                      {active ? "✓ " : ""}{lbl.name}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
 
             {isOwner && (
